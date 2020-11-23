@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { Button, Text, View } from 'react-native';
 import 'react-native-gesture-handler';
-
+import TabNavigation from './src/TabNavigator';
 function HomeScreen({ navigation }) {
     return (
         <View
@@ -14,29 +14,22 @@ function HomeScreen({ navigation }) {
                 onPress={() =>
                     navigation.navigate('details', {
                         itemId: 86,
-                        otherParam: 'anything',
+                        otherParam: 'anything you want here',
                     })
                 }
             />
+            <View style={{ marginTop: 20 }}>
+                <Button
+                    title="Go to Home Tab Navigation"
+                    onPress={() => navigation.navigate('tabNavigation')}
+                />
+            </View>
         </View>
     );
 }
 
 function HomeDetailScreen({ route, navigation }) {
     const { itemId, otherParam } = route.params;
-
-    const [count, setCount] = React.useState(0);
-
-    React.useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <Button
-                    onPress={() => setCount((c) => c + 1)}
-                    title="Update count"
-                />
-            ),
-        });
-    }, [navigation]);
 
     return (
         <View
@@ -53,7 +46,6 @@ function HomeDetailScreen({ route, navigation }) {
                     title="Press to see changes"
                     onPress={() => navigation.setOptions({ title: 'Updated!' })}
                 />
-                <Text>Count: {count}</Text>
             </View>
         </View>
     );
@@ -63,7 +55,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
     return (
-        <NavigationContainer>
+        <NavigationContainer independent={true}>
             <Stack.Navigator
                 screenOptions={{
                     headerStyle: {
@@ -75,13 +67,12 @@ export default function App() {
                         textAlign: 'center',
                     },
                     headerRight: () => (
-                        <View style={{ marginRight: 10 }}>
-                            <Button
-                                onPress={() => alert('This is a button!')}
-                                title="Info"
-                                color="#000"
-                            />
-                        </View>
+                        <Button
+                            style={{ margin: 2 }}
+                            onPress={() => alert('This is a button!')}
+                            title="Info"
+                            color="#000"
+                        />
                     ),
                 }}>
                 <Stack.Screen
@@ -104,6 +95,21 @@ export default function App() {
                     options={({ route }) => ({
                         title: route.params.otherParam,
                     })}
+                />
+                <Stack.Screen
+                    options={{
+                        headerStyle: {
+                            backgroundColor: 'gray',
+                        },
+                        headerTintColor: '#000',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                        },
+                        headerRight: () => null,
+                    }}
+                    name="tabNavigation"
+                    component={TabNavigation}
                 />
             </Stack.Navigator>
         </NavigationContainer>
