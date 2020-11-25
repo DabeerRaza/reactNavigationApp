@@ -1,117 +1,20 @@
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { Button, Text, View } from 'react-native';
 import 'react-native-gesture-handler';
-import TabNavigation from './src/TabNavigator';
-function HomeScreen({ navigation }) {
-    return (
-        <View
-            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Home Screen</Text>
-            <Button
-                title="Go to Home Detail Screen"
-                onPress={() =>
-                    navigation.navigate('details', {
-                        itemId: 86,
-                        otherParam: 'anything you want here',
-                    })
-                }
-            />
-            <View style={{ marginTop: 20 }}>
-                <Button
-                    title="Go to Home Tab Navigation"
-                    onPress={() => navigation.navigate('tabNavigation')}
-                />
-            </View>
-        </View>
-    );
-}
+import StackNavigator from './src/StackNavigator';
 
-function HomeDetailScreen({ route, navigation }) {
-    const { itemId, otherParam } = route.params;
-
-    return (
-        <View
-            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>itemId: {itemId}</Text>
-            <Text>otherParam: {otherParam}</Text>
-            <Button
-                title="Go to Home Detail Screen"
-                onPress={() => navigation.navigate('Home')}
-            />
-            <View style={{ margin: 10 }}>
-                <Button
-                    color="#ff5c5c"
-                    title="Press to see changes"
-                    onPress={() => navigation.setOptions({ title: 'Updated!' })}
-                />
-            </View>
-        </View>
-    );
-}
-
-const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function App() {
     return (
         <NavigationContainer independent={true}>
-            <Stack.Navigator
-                screenOptions={{
-                    headerStyle: {
-                        backgroundColor: '#f4511e',
-                    },
-                    headerTintColor: 'yellow',
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                    },
-                    headerRight: () => (
-                        <Button
-                            style={{ margin: 2 }}
-                            onPress={() => alert('This is a button!')}
-                            title="Info"
-                            color="#000"
-                        />
-                    ),
-                }}>
-                <Stack.Screen
-                    name="Home"
-                    component={HomeScreen}
-                    options={{
-                        headerStyle: {
-                            backgroundColor: 'gray',
-                        },
-                        headerTintColor: '#000',
-                        headerTitleStyle: {
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                        },
-                    }}
+            <Drawer.Navigator drawerType="front">
+                <Drawer.Screen
+                    name="StackNavigator"
+                    component={StackNavigator}
                 />
-                <Stack.Screen
-                    name="details"
-                    component={HomeDetailScreen}
-                    options={({ route }) => ({
-                        title: route.params.otherParam,
-                    })}
-                />
-                <Stack.Screen
-                    options={{
-                        headerStyle: {
-                            backgroundColor: 'gray',
-                        },
-                        headerTintColor: '#000',
-                        headerTitleStyle: {
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                        },
-                        headerRight: () => null,
-                    }}
-                    name="tabNavigation"
-                    component={TabNavigation}
-                />
-            </Stack.Navigator>
+            </Drawer.Navigator>
         </NavigationContainer>
     );
 }
